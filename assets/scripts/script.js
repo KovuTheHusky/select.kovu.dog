@@ -1,10 +1,13 @@
 // 1. Setup AudioContext and State
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 const audioCtx = new AudioContext();
-const audioBuffers = {}; // We will cache the decoded audio here
-let currentVersion = 6; // Default to Mega Man 6
-let bgmSource = null; // Keeps track of the looping music
-let isStarted = false; // Tracks if the user has interacted yet
+const audioBuffers = {};
+let currentVersion = 6;
+let bgmSource = null;
+let isStarted = false;
+
+// NEW: A Set to track every single sound currently playing
+const activeSources = new Set();
 
 // 2. Define all required files
 const audioFiles = [
@@ -24,13 +27,12 @@ const audioFiles = [
   "select-6",
 ];
 
-// 3. Pre-load and decode all audio instantly in the background
+// 3. Pre-load and decode all audio instantly
 async function loadAudio() {
   const loadPromises = audioFiles.map(async (fileName) => {
     try {
       const response = await fetch(`assets/sounds/${fileName}.flac`);
       const arrayBuffer = await response.arrayBuffer();
-      // Decode the audio data so it's ready for instant playback
       const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
       audioBuffers[fileName] = audioBuffer;
     } catch (err) {
@@ -45,20 +47,49 @@ loadAudio();
 function playSound(name, loop = false) {
   if (!audioBuffers[name]) return null;
 
-  // AudioBufferSourceNodes are one-time use. We create a new one for every sound.
-  // This is what allows for perfect, overlapping rapid-fire hover sounds!
   const source = audioCtx.createBufferSource();
   source.buffer = audioBuffers[name];
   source.connect(audioCtx.destination);
   source.loop = loop;
+
+  // Tag the source with its name so we can identify it later
+  source.soundName = name;
+
+  // Add it to our active tracking Set
+  activeSources.add(source);
+
+  // NEW: When the sound finishes...
+  source.onended = () => {
+    activeSources.delete(source); // Clean up the tracker
+
+    // If it was the "chosen" jingle and it wasn't interrupted by the user...
+    if (name.startsWith("chosen") && !source.interrupted) {
+      playBGM(currentVersion); // Resume the background music!
+    }
+  };
+
   source.start(0);
   return source;
 }
 
+// NEW: Helper function to abruptly kill all playing audio
+function stopAllSounds() {
+  activeSources.forEach((source) => {
+    source.interrupted = true; // Flag it so onended doesn't trigger the BGM loop
+    try {
+      source.stop();
+    } catch (e) {} // Catch safely in case it ended a millisecond ago
+  });
+  activeSources.clear();
+  bgmSource = null;
+}
+
 // 5. Function to handle Background Music switching
 function playBGM(version) {
+  // If we just want to restart BGM, kill the old one first
   if (bgmSource) {
-    bgmSource.stop(); // Stop the previous track
+    bgmSource.interrupted = true;
+    bgmSource.stop();
   }
   bgmSource = playSound(`select-${version}`, true);
 }
@@ -68,55 +99,55 @@ function unlockAudio() {
   if (isStarted) return;
   isStarted = true;
 
-  // Wake up the audio context
   if (audioCtx.state === "suspended") {
     audioCtx.resume();
   }
-  // Start the music!
   playBGM(currentVersion);
 }
 
-// Listen for the absolute first interaction to unlock audio
 window.addEventListener("pointerdown", unlockAudio, { once: true });
 window.addEventListener("keydown", unlockAudio, { once: true });
 
 // 7. Handle Keyboard Version Switching (1-6)
 window.addEventListener("keydown", (e) => {
   const key = parseInt(e.key);
-  // Check if they pressed a number between 1 and 6
-  if (key >= 1 && key <= 6) {
+
+  // If they pressed 1-6 and it's actually a NEW number
+  if (key >= 1 && key <= 6 && key !== currentVersion) {
     currentVersion = key;
-    // If audio is already running, switch the background music seamlessly
+
     if (isStarted) {
-      playBGM(currentVersion);
+      stopAllSounds(); // Kill all hovers, clicks, jingles, and old music
+      playBGM(currentVersion); // Fire up the new music
     }
   }
 });
 
 // 8. Handle Boss Cell Interactions
-// We select everything EXCEPT the center character
 const bossCells = document.querySelectorAll(
   ".boss-cell:not(.center-character)",
 );
 
 bossCells.forEach((cell) => {
-  // Hover effect
   cell.addEventListener("mouseenter", () => {
     if (isStarted) playSound("hover");
   });
 
-  // Click effect
   cell.addEventListener("click", () => {
-    if (!isStarted) unlockAudio(); // Safety fallback
+    if (!isStarted) unlockAudio();
+
+    // Stop the BGM and any previously playing 'chosen' jingles so they don't overlap
+    activeSources.forEach((source) => {
+      if (
+        source.soundName.startsWith("select") ||
+        source.soundName.startsWith("chosen")
+      ) {
+        source.interrupted = true;
+        source.stop();
+      }
+    });
 
     playSound("click");
-
-    // Stop the looping select music and play the chosen jingle
-    if (bgmSource) {
-      bgmSource.stop();
-    }
     playSound(`chosen-${currentVersion}`);
-
-    // Optional: Add a visual class here to flash the screen or animate the boss!
   });
 });
