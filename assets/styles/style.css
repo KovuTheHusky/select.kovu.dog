@@ -50,6 +50,10 @@ button {
   text-transform: uppercase;
 }
 
+button:focus {
+  outline: none;
+}
+
 main {
   position: relative;
   z-index: 1;
