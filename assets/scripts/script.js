@@ -118,21 +118,6 @@ window.addEventListener("keydown", (e) => {
   }
 });
 
-window.addEventListener("keydown", (e) => {
-  const key = parseInt(e.key);
-
-  if (key >= 1 && key <= 6 && key !== currentVersion) {
-    currentVersion = key;
-
-    if (isStarted) {
-      document.getElementById("intro-overlay").classList.remove("active");
-
-      stopAllSounds();
-      playBGM(currentVersion);
-    }
-  }
-});
-
 const bossCells = document.querySelectorAll(
   ".boss-cell:not(.center-character)",
 );
@@ -175,5 +160,47 @@ bossCells.forEach((cell) => {
 
     playSound("click");
     playSound(`chosen-${currentVersion}`);
+  });
+});
+
+// --- Track Changing Logic & UI Sync ---
+const ostButtons = document.querySelectorAll(".ost-btn");
+
+function changeTrack(newVersion) {
+  if (newVersion === currentVersion) return;
+
+  currentVersion = newVersion;
+
+  // Update the UI visually
+  ostButtons.forEach((btn) => {
+    if (parseInt(btn.dataset.track) === currentVersion) {
+      btn.classList.add("active");
+    } else {
+      btn.classList.remove("active");
+    }
+  });
+
+  // Switch the audio
+  if (isStarted) {
+    playSound("click"); // Satisfying tick when changing tracks
+    stopAllSounds();
+    playBGM(currentVersion);
+  }
+}
+
+// Update your keyboard listener to use the new helper function
+window.addEventListener("keydown", (e) => {
+  const key = parseInt(e.key);
+  if (key >= 1 && key <= 6) {
+    changeTrack(key);
+  }
+});
+
+// Make the floating UI clickable
+ostButtons.forEach((btn) => {
+  btn.addEventListener("click", (e) => {
+    e.stopPropagation(); // Prevents accidental double-clicks on the window
+    const clickedVersion = parseInt(btn.dataset.track);
+    changeTrack(clickedVersion);
   });
 });
