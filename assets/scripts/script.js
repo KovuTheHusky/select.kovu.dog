@@ -93,8 +93,30 @@ function unlockAudio() {
   playBGM(currentVersion);
 }
 
-window.addEventListener("pointerdown", unlockAudio, { once: true });
-window.addEventListener("keydown", unlockAudio, { once: true });
+// 6.5 Handle the Start Screen (Click Anywhere)
+function startGame() {
+  // If we already started, ignore this
+  if (document.body.classList.contains("is-started")) return;
+
+  // Wake up the audio and play the background music
+  unlockAudio();
+
+  // Reveal the rest of the site!
+  document.body.classList.add("is-started");
+
+  // Play the 'click' confirm sound!
+  playSound("click");
+}
+
+// Listen for a click/tap ANYWHERE on the window
+window.addEventListener("pointerdown", startGame, { once: true });
+
+// Optional: Also allow them to press 'Enter', 'Space', or any key to start
+window.addEventListener("keydown", (e) => {
+  if (!document.body.classList.contains("is-started")) {
+    startGame();
+  }
+});
 
 window.addEventListener("keydown", (e) => {
   const key = parseInt(e.key);

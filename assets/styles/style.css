@@ -17,11 +17,37 @@ body {
   text-transform: uppercase;
 }
 
+/* Make the entire screen look clickable before the game starts */
+body:not(.is-started) {
+  cursor: pointer;
+}
+
+/* --- START SCREEN GATEWAY --- */
+
+/* Hide the grid, accents, and background before starting */
+body:not(.is-started) .boss-cell,
+body:not(.is-started) .bg-accent,
+body:not(.is-started) .boss-text:not(#start-button),
+body:not(.is-started) .bg-grid {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  /* Optional: tiny fade-in for the grid */
+}
+
+/* Hide the "Press Start" button AFTER starting */
+body.is-started #start-button {
+  pointer-events: none;
+}
+
 button {
   background: none;
   border: none;
   color: inherit;
   font: inherit;
+  text-shadow: #000 0.125rem 0.125rem;
+  text-transform: uppercase;
 }
 
 main {
