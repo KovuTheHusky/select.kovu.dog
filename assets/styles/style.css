@@ -1,0 +1,151 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 100vh;
+  background-color: #0078f8;
+  font-family: 'Press Start 2P', monospace;
+  color: #fff;
+  text-shadow: #000 0.125rem 0.125rem;
+  text-transform: uppercase;
+}
+
+button {
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
+}
+
+main {
+  position: relative;
+  z-index: 1;
+}
+
+.stage-select-container {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-template-rows: repeat(7, minmax(0, 1fr));
+  width: 100vmin;
+  height: 100vmin;
+}
+
+.span-all-columns {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.boss-cell {
+  font-family: inherit;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: border-color 0.1s, background-color 0.1s;
+  margin: calc(100vmin * -0.035);
+  background: url("../images/frame.png") no-repeat center / contain;
+  image-rendering: pixelated;
+  position: relative;
+  z-index: 10;
+  font-size: 2.25vmin;
+}
+
+.boss-cell:hover {
+  background-image: url("../images/frame-hover.png");
+}
+
+.boss-cell img {
+  padding: calc(100vmin * 0.035);
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;
+  pointer-events: none;
+}
+
+.center-character {
+  cursor: default;
+}
+
+.center-character:hover {
+  background-image: url("../images/frame.png");
+}
+
+.boss-text {
+  font-family: inherit;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2.25vmin;
+}
+
+.bg-grid {
+  position: absolute;
+  width: 100vw;
+  height: 100vmin;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  display: grid;
+  grid-template-rows: repeat(7, 1fr);
+}
+
+.bg-row:nth-child(even) {
+  background: linear-gradient(to bottom,
+      #f8f8f8 0% 3.125%,
+      #3fbfff 3.125% 6.25%,
+      #3fbfff 6.25% 9.375%,
+      #3fbfff 9.375% 12.5%,
+      #3fbfff 12.5% 15.625%,
+      #0078f8 15.625% 18.75%,
+      #000000 18.75% 21.875%,
+      #0078f8 21.875% 25%,
+      #0078f8 25% 28.125%,
+      #3fbfff 28.125% 31.25%,
+      #0078f8 31.25% 34.375%,
+      #3fbfff 34.375% 37.5%,
+      #3fbfff 37.5% 40.625%,
+      #3fbfff 40.625% 43.75%,
+      #3fbfff 43.75% 46.875%,
+      #f8f8f8 46.875% 50%,
+      #3fbfff 50% 53.125%,
+      #f8f8f8 53.125% 56.25%,
+      #3fbfff 56.25% 59.375%,
+      #3fbfff 59.375% 62.5%,
+      #3fbfff 62.5% 65.625%,
+      #0078f8 65.625% 68.75%,
+      #3fbfff 68.75% 71.875%,
+      #0078f8 71.875% 75%,
+      #0078f8 75% 78.125%,
+      #f8f8f8 78.125% 81.25%,
+      #3fbfff 81.25% 84.375%,
+      #3fbfff 84.375% 87.5%,
+      #3fbfff 87.5% 90.625%,
+      #3fbfff 90.625% 93.75%,
+      #0078f8 93.75% 96.875%,
+      #000000 96.875% 100%);
+}
+
+.bg-accent img {
+  height: 100%;
+  image-rendering: pixelated;
+  pointer-events: none;
+}
+
+.bg-accent img.left {
+  margin-left: calc(100vmin * 0.035);
+}
+
+.bg-accent img.right {
+  margin-right: calc(100vmin * 0.035);
+}
