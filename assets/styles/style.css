@@ -193,8 +193,8 @@ main {
 
 /* Front, faster, bigger stars */
 .stars {
-  width: 4px;
-  height: 4px;
+  width: 16px;
+  height: 16px;
   box-shadow:
     10vw 10vh #FFF, 30vw 20vh #FFF, 50vw 5vh #FFF, 70vw 25vh #FFF, 90vw 15vh #FFF,
     20vw 40vh #FFF, 40vw 50vh #FFF, 60vw 35vh #FFF, 80vw 45vh #FFF, 15vw 60vh #FFF,
@@ -207,8 +207,8 @@ main {
 
 /* Back, slower, dimmer stars for depth */
 .stars-parallax {
-  width: 2px;
-  height: 2px;
+  width: 8px;
+  height: 8px;
   box-shadow:
     15vw 5vh #AFAFAF, 35vw 15vh #AFAFAF, 55vw 25vh #AFAFAF, 75vw 10vh #AFAFAF, 95vw 30vh #AFAFAF,
     5vw 45vh #AFAFAF, 25vw 35vh #AFAFAF, 45vw 55vh #AFAFAF, 65vw 40vh #AFAFAF, 85vw 60vh #AFAFAF,
