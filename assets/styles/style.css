@@ -150,7 +150,7 @@ main {
   margin-right: calc(100vmin * 0.035);
 }
 
-/* --- BOSS INTRO ANIMATION --- */
+/* --- BOSS INTRO ANIMATION & STARFIELD --- */
 .intro-overlay {
   position: fixed;
   top: 0;
@@ -158,19 +158,14 @@ main {
   width: 100vw;
   height: 100vh;
   z-index: 100;
-  /* Sits on top of absolutely everything */
-
   display: flex;
   justify-content: center;
   align-items: center;
-
-  /* Hidden by default */
   opacity: 0;
   pointer-events: none;
 }
 
 .intro-overlay.active {
-  /* Instantly appear with no fade when the class is added */
   opacity: 1;
   pointer-events: all;
 }
@@ -183,35 +178,88 @@ main {
   height: 100%;
   z-index: 101;
   background-color: #000;
+  overflow: hidden;
+  /* Keeps stars from creating scrollbars */
 }
 
-/* The rapid background flash triggered when active */
-.intro-overlay.active .intro-bg {
-  animation: nesStrobe 0.1s infinite alternate;
+/* Base Star Layers */
+.stars,
+.stars-parallax {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: transparent;
 }
 
-/* Rapidly flashes between black and a deep blue/purple */
-@keyframes nesStrobe {
+/* Front, faster, bigger stars */
+.stars {
+  width: 4px;
+  height: 4px;
+  box-shadow:
+    10vw 10vh #FFF, 30vw 20vh #FFF, 50vw 5vh #FFF, 70vw 25vh #FFF, 90vw 15vh #FFF,
+    20vw 40vh #FFF, 40vw 50vh #FFF, 60vw 35vh #FFF, 80vw 45vh #FFF, 15vw 60vh #FFF,
+    35vw 75vh #FFF, 55vw 65vh #FFF, 75vw 85vh #FFF, 95vw 70vh #FFF, 5vw 90vh #FFF,
+    /* Seamless Loop Duplicates (-100vh higher) */
+    10vw -90vh #FFF, 30vw -80vh #FFF, 50vw -95vh #FFF, 70vw -75vh #FFF, 90vw -85vh #FFF,
+    20vw -60vh #FFF, 40vw -50vh #FFF, 60vw -65vh #FFF, 80vw -55vh #FFF, 15vw -40vh #FFF,
+    35vw -25vh #FFF, 55vw -35vh #FFF, 75vw -15vh #FFF, 95vw -30vh #FFF, 5vw -10vh #FFF;
+}
+
+/* Back, slower, dimmer stars for depth */
+.stars-parallax {
+  width: 2px;
+  height: 2px;
+  box-shadow:
+    15vw 5vh #AFAFAF, 35vw 15vh #AFAFAF, 55vw 25vh #AFAFAF, 75vw 10vh #AFAFAF, 95vw 30vh #AFAFAF,
+    5vw 45vh #AFAFAF, 25vw 35vh #AFAFAF, 45vw 55vh #AFAFAF, 65vw 40vh #AFAFAF, 85vw 60vh #AFAFAF,
+    10vw 70vh #AFAFAF, 30vw 85vh #AFAFAF, 50vw 75vh #AFAFAF, 70vw 95vh #AFAFAF, 90vw 80vh #AFAFAF,
+    /* Seamless Loop Duplicates (-100vh higher) */
+    15vw -95vh #AFAFAF, 35vw -85vh #AFAFAF, 55vw -75vh #AFAFAF, 75vw -90vh #AFAFAF, 95vw -70vh #AFAFAF,
+    5vw -55vh #AFAFAF, 25vw -65vh #AFAFAF, 45vw -45vh #AFAFAF, 65vw -60vh #AFAFAF, 85vw -40vh #AFAFAF,
+    10vw -30vh #AFAFAF, 30vw -15vh #AFAFAF, 50vw -25vh #AFAFAF, 70vw -5vh #AFAFAF, 90vw -20vh #AFAFAF;
+}
+
+/* Trigger the animations only when active */
+.intro-overlay.active .stars {
+  animation: starScroll 0.8s linear infinite;
+}
+
+.intro-overlay.active .stars-parallax {
+  animation: starScroll 1.6s linear infinite;
+  /* Slower = further away */
+}
+
+@keyframes starScroll {
   0% {
-    background-color: #000000;
+    transform: translateY(0);
   }
 
   100% {
-    background-color: #0034b2;
+    transform: translateY(100vh);
   }
 }
 
-#intro-boss-sprite {
+/* Content Stacking */
+.intro-content {
   position: relative;
   z-index: 102;
-  /* Sits above the flashing background */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4vmin;
+}
 
-  /* Scale the tiny sprite up massively */
+#intro-boss-sprite {
   width: 40vmin;
   height: 40vmin;
   object-fit: contain;
   image-rendering: pixelated;
+}
 
-  /* Optional: Add a drop shadow to make the sprite pop off the strobing background */
-  filter: drop-shadow(0px 0px 0px #fff);
+.intro-name {
+  color: #FFF;
+  font-size: 6vmin;
+  text-shadow: #000 0.35rem 0.35rem;
+  /* Classic chunky shadow */
+  letter-spacing: 0.2rem;
 }

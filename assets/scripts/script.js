@@ -110,7 +110,6 @@ window.addEventListener("pointerdown", unlockAudio, { once: true });
 window.addEventListener("keydown", unlockAudio, { once: true });
 
 // 7. Handle Keyboard Version Switching (1-6)
-// 7. Handle Keyboard Version Switching (1-6)
 window.addEventListener("keydown", (e) => {
   const key = parseInt(e.key);
 
@@ -150,10 +149,24 @@ bossCells.forEach((cell) => {
       }
     });
 
-    // NEW: Grab the image from the clicked cell and pass it to the overlay
+    // Grabbing the Boss Image
     const bossImg = cell.querySelector("img");
+
+    // NEW: Finding the boss name exactly 7 DOM nodes forward
+    const parentContainer = cell.parentElement;
+    const allCells = Array.from(parentContainer.children);
+    const clickedIndex = allCells.indexOf(cell);
+    const nameCell = allCells[clickedIndex + 7];
+
     if (bossImg) {
       document.getElementById("intro-boss-sprite").src = bossImg.src;
+
+      // If we found the text cell, inject its exact text into the overlay
+      if (nameCell) {
+        document.getElementById("intro-boss-name").textContent =
+          nameCell.textContent;
+      }
+
       document.getElementById("intro-overlay").classList.add("active");
     }
 
