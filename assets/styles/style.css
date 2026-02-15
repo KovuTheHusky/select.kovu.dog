@@ -41,6 +41,24 @@ body.is-started #start-button {
   pointer-events: none;
 }
 
+/* --- PRESS START BLINK ANIMATION --- */
+#start-button {
+  /* 1 second total loop, hard snapping between visible/hidden */
+  animation: retroBlink 1s step-end infinite;
+}
+
+@keyframes retroBlink {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
 button {
   background: none;
   border: none;
