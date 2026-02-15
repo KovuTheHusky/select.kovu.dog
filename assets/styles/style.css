@@ -149,3 +149,69 @@ main {
 .bg-accent img.right {
   margin-right: calc(100vmin * 0.035);
 }
+
+/* --- BOSS INTRO ANIMATION --- */
+.intro-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 100;
+  /* Sits on top of absolutely everything */
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  /* Hidden by default */
+  opacity: 0;
+  pointer-events: none;
+}
+
+.intro-overlay.active {
+  /* Instantly appear with no fade when the class is added */
+  opacity: 1;
+  pointer-events: all;
+}
+
+.intro-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 101;
+  background-color: #000;
+}
+
+/* The rapid background flash triggered when active */
+.intro-overlay.active .intro-bg {
+  animation: nesStrobe 0.1s infinite alternate;
+}
+
+/* Rapidly flashes between black and a deep blue/purple */
+@keyframes nesStrobe {
+  0% {
+    background-color: #000000;
+  }
+
+  100% {
+    background-color: #0034b2;
+  }
+}
+
+#intro-boss-sprite {
+  position: relative;
+  z-index: 102;
+  /* Sits above the flashing background */
+
+  /* Scale the tiny sprite up massively */
+  width: 40vmin;
+  height: 40vmin;
+  object-fit: contain;
+  image-rendering: pixelated;
+
+  /* Optional: Add a drop shadow to make the sprite pop off the strobing background */
+  filter: drop-shadow(0px 0px 0px #fff);
+}

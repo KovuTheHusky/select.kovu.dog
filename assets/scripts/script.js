@@ -64,6 +64,7 @@ function playSound(name, loop = false) {
 
     // If it was the "chosen" jingle and it wasn't interrupted by the user...
     if (name.startsWith("chosen") && !source.interrupted) {
+      document.getElementById("intro-overlay").classList.remove("active");
       playBGM(currentVersion); // Resume the background music!
     }
   };
@@ -109,16 +110,19 @@ window.addEventListener("pointerdown", unlockAudio, { once: true });
 window.addEventListener("keydown", unlockAudio, { once: true });
 
 // 7. Handle Keyboard Version Switching (1-6)
+// 7. Handle Keyboard Version Switching (1-6)
 window.addEventListener("keydown", (e) => {
   const key = parseInt(e.key);
 
-  // If they pressed 1-6 and it's actually a NEW number
   if (key >= 1 && key <= 6 && key !== currentVersion) {
     currentVersion = key;
 
     if (isStarted) {
-      stopAllSounds(); // Kill all hovers, clicks, jingles, and old music
-      playBGM(currentVersion); // Fire up the new music
+      // NEW: Force hide the overlay if they change tracks mid-animation
+      document.getElementById("intro-overlay").classList.remove("active");
+
+      stopAllSounds();
+      playBGM(currentVersion);
     }
   }
 });
@@ -136,7 +140,6 @@ bossCells.forEach((cell) => {
   cell.addEventListener("click", () => {
     if (!isStarted) unlockAudio();
 
-    // Stop the BGM and any previously playing 'chosen' jingles so they don't overlap
     activeSources.forEach((source) => {
       if (
         source.soundName.startsWith("select") ||
@@ -146,6 +149,13 @@ bossCells.forEach((cell) => {
         source.stop();
       }
     });
+
+    // NEW: Grab the image from the clicked cell and pass it to the overlay
+    const bossImg = cell.querySelector("img");
+    if (bossImg) {
+      document.getElementById("intro-boss-sprite").src = bossImg.src;
+      document.getElementById("intro-overlay").classList.add("active");
+    }
 
     playSound("click");
     playSound(`chosen-${currentVersion}`);
