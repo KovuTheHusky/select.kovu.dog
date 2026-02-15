@@ -59,8 +59,30 @@ main {
   font-size: 2.25vmin;
 }
 
+/* --- FLASHING HOVER CURSOR --- */
 .boss-cell:hover {
-  background-image: url("../images/frame-hover.png");
+  /* 0.5s total duration, snapping between states, looping infinitely */
+  animation: flashCursor 0.25s step-end infinite;
+}
+
+@keyframes flashCursor {
+  0% {
+    background-image: url("../images/frame-hover.png");
+  }
+
+  50% {
+    background-image: url("../images/frame.png");
+  }
+
+  100% {
+    background-image: url("../images/frame-hover.png");
+  }
+}
+
+/* Prevent the center character from flashing if hovered */
+.center-character:hover {
+  animation: none;
+  background-image: url("../images/frame.png");
 }
 
 .boss-cell img {
@@ -74,10 +96,6 @@ main {
 
 .center-character {
   cursor: default;
-}
-
-.center-character:hover {
-  background-image: url("../images/frame.png");
 }
 
 .boss-text {
