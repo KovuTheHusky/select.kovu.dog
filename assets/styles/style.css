@@ -122,12 +122,12 @@ main {
 
 @media (hover: hover) {
   .boss-cell:hover {
-    animation: flashCursor 0.5s step-end infinite;
+    animation: flashCursor 0.25s step-end infinite;
   }
 }
 
 .boss-cell.mobile-hover-active {
-  animation: flashCursor 0.5s step-end infinite;
+  animation: flashCursor 0.25s step-end infinite;
 }
 
 @keyframes flashCursor {
