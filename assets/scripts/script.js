@@ -24,6 +24,15 @@ const audioFiles = [
   "select-6",
 ];
 
+const loopPoints = {
+  "select-1": { start: 0, end: 4.265 },
+  "select-2": { start: 1.325, end: 6.65 },
+  "select-3": { start: 0, end: 9.595 },
+  "select-4": { start: 12.86, end: 25.565 },
+  "select-5": { start: 0, end: 8.515 },
+  "select-6": { start: 0, end: 12.275 },
+};
+
 async function loadAudio() {
   const loadPromises = audioFiles.map(async (fileName) => {
     try {
@@ -51,6 +60,15 @@ function playSound(name, loop = false) {
   source.buffer = audioBuffers[name];
   source.connect(audioCtx.destination);
   source.loop = loop;
+
+  // --- NEW: APPLY LOOP POINTS ---
+  if (loop && loopPoints[name]) {
+    source.loopStart = loopPoints[name].start;
+    // Only apply loopEnd if you explicitly defined it in the object above
+    if (loopPoints[name].end) {
+      source.loopEnd = loopPoints[name].end;
+    }
+  }
 
   source.soundName = name;
 
