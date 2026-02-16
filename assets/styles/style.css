@@ -4,17 +4,20 @@
   padding: 0;
 }
 
-body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
   text-align: center;
-  min-height: 100vh;
   background-color: #0078f8;
   font-family: 'Press Start 2P', monospace;
   color: #fff;
   text-shadow: #000 0.125rem 0.125rem;
   text-transform: uppercase;
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Make the entire screen look clickable before the game starts */
@@ -39,6 +42,18 @@ body:not(.is-started) .bg-grid {
 /* Hide the "Press Start" button AFTER starting */
 body.is-started #start-button {
   pointer-events: none;
+}
+
+/* --- MASSIVE START BUTTON HITBOX --- */
+body:not(.is-started) #start-button::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100dvh;
+  z-index: 9999; /* Ensures it sits on top of absolutely everything */
+  cursor: pointer;
 }
 
 /* --- PRESS START BLINK ANIMATION --- */
@@ -78,6 +93,11 @@ main {
 }
 
 .stage-select-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
   grid-template-rows: repeat(7, minmax(0, 1fr));
