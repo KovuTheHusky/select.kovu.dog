@@ -108,9 +108,17 @@ main {
 }
 
 /* --- FLASHING HOVER CURSOR --- */
-.boss-cell:hover {
-  /* 0.5s total duration, snapping between states, looping infinitely */
-  animation: flashCursor 0.25s step-end infinite;
+
+/* Only apply native CSS hover if the device supports a physical mouse */
+@media (hover: hover) {
+  .boss-cell:hover {
+    animation: flashCursor 0.5s step-end infinite;
+  }
+}
+
+/* Manually apply the flash animation on mobile via our JavaScript class */
+.boss-cell.mobile-hover-active {
+  animation: flashCursor 0.5s step-end infinite;
 }
 
 @keyframes flashCursor {

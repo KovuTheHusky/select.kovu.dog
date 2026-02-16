@@ -118,18 +118,54 @@ window.addEventListener("keydown", (e) => {
   }
 });
 
+// 8. Handle Boss Cell Interactions
 const bossCells = document.querySelectorAll(
   ".boss-cell:not(.center-character)",
 );
 
+// NEW: Keep track of which cell is currently "hovered" on mobile
+let currentMobileHover = null;
+
 bossCells.forEach((cell) => {
-  cell.addEventListener("mouseenter", () => {
-    if (isStarted) playSound("hover");
+  // Handle Desktop Hovering
+  cell.addEventListener("pointerenter", (e) => {
+    // ONLY play the hover sound if they are using a physical mouse.
+    // Touch screens fire this right before a click, which causes double audio.
+    if (isStarted && e.pointerType === "mouse") {
+      playSound("hover");
+    }
   });
 
-  cell.addEventListener("click", () => {
+  // Handle Clicking & Tapping
+  cell.addEventListener("click", (e) => {
     if (!isStarted) unlockAudio();
 
+    // --- NEW: MOBILE TOUCH INTERCEPT ---
+    // Check if the user is on a touch device (coarse pointer)
+    if (window.matchMedia("(pointer: coarse)").matches) {
+      // If they tapped a cell that isn't currently "hovered"
+      if (currentMobileHover !== cell) {
+        // Remove the visual hover state from any previously tapped cell
+        bossCells.forEach((c) => c.classList.remove("mobile-hover-active"));
+
+        // Set this new cell as the active hover
+        currentMobileHover = cell;
+        cell.classList.add("mobile-hover-active");
+
+        // Play the hover sound and STOP. Do not trigger the boss intro yet!
+        playSound("hover");
+        return;
+      }
+    }
+
+    // --- NORMAL CLICK LOGIC ---
+    // If we reach here, it's either a desktop click, OR the second tap on mobile!
+
+    // Clean up the mobile hover tracker
+    currentMobileHover = null;
+    cell.classList.remove("mobile-hover-active");
+
+    // Stop previous music
     activeSources.forEach((source) => {
       if (
         source.soundName.startsWith("select") ||
@@ -140,8 +176,10 @@ bossCells.forEach((cell) => {
       }
     });
 
+    // Grab the Boss Image
     const bossImg = cell.querySelector("img");
 
+    // Find the boss name exactly 7 DOM nodes forward
     const parentContainer = cell.parentElement;
     const allCells = Array.from(parentContainer.children);
     const clickedIndex = allCells.indexOf(cell);
@@ -161,6 +199,16 @@ bossCells.forEach((cell) => {
     playSound("click");
     playSound(`chosen-${currentVersion}`);
   });
+});
+
+// Optional: If they tap the center character or empty space on mobile, clear the hover
+document.addEventListener("click", (e) => {
+  if (window.matchMedia("(pointer: coarse)").matches && currentMobileHover) {
+    if (!e.target.closest(".boss-cell:not(.center-character)")) {
+      bossCells.forEach((c) => c.classList.remove("mobile-hover-active"));
+      currentMobileHover = null;
+    }
+  }
 });
 
 // --- Track Changing Logic & UI Sync ---
