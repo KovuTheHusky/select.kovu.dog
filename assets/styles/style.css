@@ -4,7 +4,8 @@
   padding: 0;
 }
 
-html, body {
+html,
+body {
   width: 100%;
   height: 100%;
   margin: 0;
@@ -20,14 +21,12 @@ html, body {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Make the entire screen look clickable before the game starts */
-body:not(.is-started) {
-  cursor: pointer;
+body:not(.is-started) #start-button.loading-state {
+  animation: none;
+  cursor: default;
+  pointer-events: none;
 }
 
-/* --- START SCREEN GATEWAY --- */
-
-/* Hide the grid, accents, and background before starting */
 body:not(.is-started) .boss-cell,
 body:not(.is-started) .bg-accent,
 body:not(.is-started) .boss-text:not(#start-button),
@@ -35,16 +34,12 @@ body:not(.is-started) .bg-grid {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.2s;
-  /* Optional: tiny fade-in for the grid */
 }
 
-/* Hide the "Press Start" button AFTER starting */
 body.is-started #start-button {
   pointer-events: none;
 }
 
-/* --- MASSIVE START BUTTON HITBOX --- */
 body:not(.is-started) #start-button::after {
   content: "";
   position: fixed;
@@ -52,13 +47,11 @@ body:not(.is-started) #start-button::after {
   left: 0;
   width: 100vw;
   height: 100dvh;
-  z-index: 9999; /* Ensures it sits on top of absolutely everything */
+  z-index: 9999;
   cursor: pointer;
 }
 
-/* --- PRESS START BLINK ANIMATION --- */
-#start-button {
-  /* 1 second total loop, hard snapping between visible/hidden */
+body #start-button:not(.loading-state) {
   animation: retroBlink 1s step-end infinite;
 }
 
@@ -127,16 +120,12 @@ main {
   font-size: 2.25vmin;
 }
 
-/* --- FLASHING HOVER CURSOR --- */
-
-/* Only apply native CSS hover if the device supports a physical mouse */
 @media (hover: hover) {
   .boss-cell:hover {
     animation: flashCursor 0.5s step-end infinite;
   }
 }
 
-/* Manually apply the flash animation on mobile via our JavaScript class */
 .boss-cell.mobile-hover-active {
   animation: flashCursor 0.5s step-end infinite;
 }
@@ -155,7 +144,6 @@ main {
   }
 }
 
-/* Prevent the center character from flashing if hovered */
 .center-character:hover {
   animation: none;
   background-image: url("../images/frame.png");
@@ -244,7 +232,6 @@ main {
   margin-right: calc(100vmin * 0.035);
 }
 
-/* --- BOSS INTRO ANIMATION & STARFIELD --- */
 .intro-overlay {
   position: fixed;
   top: 0;
@@ -273,10 +260,8 @@ main {
   z-index: 101;
   background-color: #000;
   overflow: hidden;
-  /* Keeps stars from creating scrollbars */
 }
 
-/* Base Star Layers */
 .stars,
 .stars-parallax {
   position: absolute;
@@ -285,7 +270,6 @@ main {
   background: transparent;
 }
 
-/* Front, faster, bigger stars */
 .stars {
   width: 16px;
   height: 16px;
@@ -293,13 +277,11 @@ main {
     10vw 10vh #FFF, 30vw 20vh #FFF, 50vw 5vh #FFF, 70vw 25vh #FFF, 90vw 15vh #FFF,
     20vw 40vh #FFF, 40vw 50vh #FFF, 60vw 35vh #FFF, 80vw 45vh #FFF, 15vw 60vh #FFF,
     35vw 75vh #FFF, 55vw 65vh #FFF, 75vw 85vh #FFF, 95vw 70vh #FFF, 5vw 90vh #FFF,
-    /* Seamless Loop Duplicates (-100vh higher) */
     10vw -90vh #FFF, 30vw -80vh #FFF, 50vw -95vh #FFF, 70vw -75vh #FFF, 90vw -85vh #FFF,
     20vw -60vh #FFF, 40vw -50vh #FFF, 60vw -65vh #FFF, 80vw -55vh #FFF, 15vw -40vh #FFF,
     35vw -25vh #FFF, 55vw -35vh #FFF, 75vw -15vh #FFF, 95vw -30vh #FFF, 5vw -10vh #FFF;
 }
 
-/* Back, slower, dimmer stars for depth */
 .stars-parallax {
   width: 8px;
   height: 8px;
@@ -307,20 +289,17 @@ main {
     15vw 5vh #AFAFAF, 35vw 15vh #AFAFAF, 55vw 25vh #AFAFAF, 75vw 10vh #AFAFAF, 95vw 30vh #AFAFAF,
     5vw 45vh #AFAFAF, 25vw 35vh #AFAFAF, 45vw 55vh #AFAFAF, 65vw 40vh #AFAFAF, 85vw 60vh #AFAFAF,
     10vw 70vh #AFAFAF, 30vw 85vh #AFAFAF, 50vw 75vh #AFAFAF, 70vw 95vh #AFAFAF, 90vw 80vh #AFAFAF,
-    /* Seamless Loop Duplicates (-100vh higher) */
     15vw -95vh #AFAFAF, 35vw -85vh #AFAFAF, 55vw -75vh #AFAFAF, 75vw -90vh #AFAFAF, 95vw -70vh #AFAFAF,
     5vw -55vh #AFAFAF, 25vw -65vh #AFAFAF, 45vw -45vh #AFAFAF, 65vw -60vh #AFAFAF, 85vw -40vh #AFAFAF,
     10vw -30vh #AFAFAF, 30vw -15vh #AFAFAF, 50vw -25vh #AFAFAF, 70vw -5vh #AFAFAF, 90vw -20vh #AFAFAF;
 }
 
-/* Trigger the animations only when active */
 .intro-overlay.active .stars {
   animation: starScroll 0.8s linear infinite;
 }
 
 .intro-overlay.active .stars-parallax {
   animation: starScroll 1.6s linear infinite;
-  /* Slower = further away */
 }
 
 @keyframes starScroll {
@@ -333,7 +312,6 @@ main {
   }
 }
 
-/* Content Stacking */
 .intro-content {
   position: relative;
   z-index: 102;
@@ -354,17 +332,13 @@ main {
   color: #FFF;
   font-size: 6vmin;
   text-shadow: #000 0.35rem 0.35rem;
-  /* Classic chunky shadow */
   letter-spacing: 0.2rem;
 }
 
-/* --- FLOATING OST SELECTOR --- */
 .ost-selector {
   position: fixed;
   bottom: 1.125vmin;
-  /* Keeps it neatly tucked at the bottom */
   right: 1.125vmin;
-  /* Pushed slightly off the right edge */
   z-index: 50;
 
   display: flex;
@@ -373,7 +347,6 @@ main {
 
   font-family: inherit;
   font-size: 1.125vmin;
-  /* Scales safely with the screen */
   text-shadow: #000 0.125rem 0.125rem;
 
   transition: opacity 0.2s, visibility 0.2s;
@@ -382,13 +355,11 @@ main {
 @media (max-width: 600px) {
   .ost-selector {
     font-size: 2.5vw;
-    /* Switch to viewport width scaling on small screens */
     bottom: 2.25vw;
     right: 2.25vw;
   }
 }
 
-/* Hide the OST selector before the game starts */
 body:not(.is-started) .ost-selector {
   opacity: 0;
   visibility: hidden;
@@ -403,7 +374,6 @@ body:not(.is-started) .ost-selector {
 .ost-btn {
   cursor: pointer;
   color: #AFAFAF;
-  /* Dim grey for inactive tracks */
   transition: color 0.1s;
 }
 
@@ -413,7 +383,6 @@ body:not(.is-started) .ost-selector {
 
 .ost-btn.active {
   color: #fff;
-  /* Flashing yellow for the active track */
   animation: ostPulse 0.5s step-end infinite;
 }
 

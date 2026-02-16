@@ -35,7 +35,12 @@ async function loadAudio() {
       console.error(`Failed to load ${fileName}.flac`, err);
     }
   });
+
   await Promise.all(loadPromises);
+
+  const startBtn = document.getElementById("start-button");
+  startBtn.textContent = "PRESS START";
+  startBtn.classList.remove("loading-state");
 }
 loadAudio();
 
@@ -110,21 +115,18 @@ function startGame() {
 
 // Listen for a click/tap ANYWHERE on the window
 // Grab the button element
-const startButton = document.getElementById('start-button');
+const startButton = document.getElementById("start-button");
 
 // Listen for a click on the button (which now covers the whole screen)
-startButton.addEventListener('click', startGame, { once: true });
+startButton.addEventListener("click", startGame, { once: true });
 
-// (Keep the keydown listener exactly as it is, so keyboard users can still start the game)
-window.addEventListener('keydown', (e) => {
-  if (!document.body.classList.contains('is-started')) {
-    startGame();
-  }
-});
-
-// Optional: Also allow them to press 'Enter', 'Space', or any key to start
+// Listen for 'Enter', 'Space', or any key to start (but only if done loading!)
 window.addEventListener("keydown", (e) => {
-  if (!document.body.classList.contains("is-started")) {
+  const startBtn = document.getElementById("start-button");
+  const isStarted = document.body.classList.contains("is-started");
+  const isLoading = startBtn.classList.contains("loading-state");
+
+  if (!isStarted && !isLoading) {
     startGame();
   }
 });
@@ -134,7 +136,6 @@ const bossCells = document.querySelectorAll(
   ".boss-cell:not(.center-character)",
 );
 
-// NEW: Keep track of which cell is currently "hovered" on mobile
 let currentMobileHover = null;
 
 bossCells.forEach((cell) => {
@@ -151,7 +152,6 @@ bossCells.forEach((cell) => {
   cell.addEventListener("click", (e) => {
     if (!isStarted) unlockAudio();
 
-    // --- NEW: MOBILE TOUCH INTERCEPT ---
     // Check if the user is on a touch device (coarse pointer)
     if (window.matchMedia("(pointer: coarse)").matches) {
       // If they tapped a cell that isn't currently "hovered"
