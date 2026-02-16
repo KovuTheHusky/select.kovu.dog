@@ -44,6 +44,18 @@ body.is-started #start-button {
   pointer-events: none;
 }
 
+/* --- MASSIVE START BUTTON HITBOX --- */
+body:not(.is-started) #start-button::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100dvh;
+  z-index: 9999; /* Ensures it sits on top of absolutely everything */
+  cursor: pointer;
+}
+
 /* --- PRESS START BLINK ANIMATION --- */
 #start-button {
   /* 1 second total loop, hard snapping between visible/hidden */
