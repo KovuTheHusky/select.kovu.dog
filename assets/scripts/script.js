@@ -109,7 +109,18 @@ function startGame() {
 }
 
 // Listen for a click/tap ANYWHERE on the window
-window.addEventListener("pointerdown", startGame, { once: true });
+// Grab the button element
+const startButton = document.getElementById('start-button');
+
+// Listen for a click on the button (which now covers the whole screen)
+startButton.addEventListener('click', startGame, { once: true });
+
+// (Keep the keydown listener exactly as it is, so keyboard users can still start the game)
+window.addEventListener('keydown', (e) => {
+  if (!document.body.classList.contains('is-started')) {
+    startGame();
+  }
+});
 
 // Optional: Also allow them to press 'Enter', 'Space', or any key to start
 window.addEventListener("keydown", (e) => {
