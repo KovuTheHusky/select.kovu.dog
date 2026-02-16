@@ -274,42 +274,47 @@ main {
   width: 16px;
   height: 16px;
   box-shadow:
+    /* Original 15 Stars */
     10vw 10vh #FFF, 30vw 20vh #FFF, 50vw 5vh #FFF, 70vw 25vh #FFF, 90vw 15vh #FFF,
     20vw 40vh #FFF, 40vw 50vh #FFF, 60vw 35vh #FFF, 80vw 45vh #FFF, 15vw 60vh #FFF,
     35vw 75vh #FFF, 55vw 65vh #FFF, 75vw 85vh #FFF, 95vw 70vh #FFF, 5vw 90vh #FFF,
-    10vw -90vh #FFF, 30vw -80vh #FFF, 50vw -95vh #FFF, 70vw -75vh #FFF, 90vw -85vh #FFF,
-    20vw -60vh #FFF, 40vw -50vh #FFF, 60vw -65vh #FFF, 80vw -55vh #FFF, 15vw -40vh #FFF,
-    35vw -25vh #FFF, 55vw -35vh #FFF, 75vw -15vh #FFF, 95vw -30vh #FFF, 5vw -10vh #FFF;
+    /* Seamless Loop Duplicates (Shifted -100vw to the left) */
+    -90vw 10vh #FFF, -70vw 20vh #FFF, -50vw 5vh #FFF, -30vw 25vh #FFF, -10vw 15vh #FFF,
+    -80vw 40vh #FFF, -60vw 50vh #FFF, -40vw 35vh #FFF, -20vw 45vh #FFF, -85vw 60vh #FFF,
+    -65vw 75vh #FFF, -45vw 65vh #FFF, -25vw 85vh #FFF, -5vw 70vh #FFF, -95vw 90vh #FFF;
 }
 
 .stars-parallax {
   width: 8px;
   height: 8px;
   box-shadow:
+    /* Original 15 Stars */
     15vw 5vh #AFAFAF, 35vw 15vh #AFAFAF, 55vw 25vh #AFAFAF, 75vw 10vh #AFAFAF, 95vw 30vh #AFAFAF,
     5vw 45vh #AFAFAF, 25vw 35vh #AFAFAF, 45vw 55vh #AFAFAF, 65vw 40vh #AFAFAF, 85vw 60vh #AFAFAF,
     10vw 70vh #AFAFAF, 30vw 85vh #AFAFAF, 50vw 75vh #AFAFAF, 70vw 95vh #AFAFAF, 90vw 80vh #AFAFAF,
-    15vw -95vh #AFAFAF, 35vw -85vh #AFAFAF, 55vw -75vh #AFAFAF, 75vw -90vh #AFAFAF, 95vw -70vh #AFAFAF,
-    5vw -55vh #AFAFAF, 25vw -65vh #AFAFAF, 45vw -45vh #AFAFAF, 65vw -60vh #AFAFAF, 85vw -40vh #AFAFAF,
-    10vw -30vh #AFAFAF, 30vw -15vh #AFAFAF, 50vw -25vh #AFAFAF, 70vw -5vh #AFAFAF, 90vw -20vh #AFAFAF;
+    /* Seamless Loop Duplicates (Shifted -100vw to the left) */
+    -85vw 5vh #AFAFAF, -65vw 15vh #AFAFAF, -45vw 25vh #AFAFAF, -25vw 10vh #AFAFAF, -5vw 30vh #AFAFAF,
+    -95vw 45vh #AFAFAF, -75vw 35vh #AFAFAF, -55vw 55vh #AFAFAF, -35vw 40vh #AFAFAF, -15vw 60vh #AFAFAF,
+    -90vw 70vh #AFAFAF, -70vw 85vh #AFAFAF, -50vw 75vh #AFAFAF, -30vw 95vh #AFAFAF, -10vw 80vh #AFAFAF;
 }
 
-.intro-overlay.active .stars {
-  animation: starScroll 0.8s linear infinite;
-}
-
-.intro-overlay.active .stars-parallax {
-  animation: starScroll 1.6s linear infinite;
-}
-
+/* Changed from translateY to translateX */
 @keyframes starScroll {
   0% {
-    transform: translateY(0);
+    transform: translateX(0);
   }
 
   100% {
-    transform: translateY(100vh);
+    transform: translateX(100vw);
   }
+}
+
+.intro-overlay.active .stars {
+  animation: starScroll 1s linear infinite;
+}
+
+.intro-overlay.active .stars-parallax {
+  animation: starScroll 2s linear infinite;
 }
 
 .intro-content {
