@@ -241,7 +241,7 @@ document.addEventListener("click", (e) => {
 });
 
 // --- Track Changing Logic & UI Sync ---
-const ostButtons = document.querySelectorAll(".ost-btn");
+const bgmButtons = document.querySelectorAll(".bgm-btn");
 
 function changeTrack(newVersion) {
   if (newVersion === currentVersion) return;
@@ -249,7 +249,7 @@ function changeTrack(newVersion) {
   currentVersion = newVersion;
 
   // Update the UI visually
-  ostButtons.forEach((btn) => {
+  bgmButtons.forEach((btn) => {
     if (parseInt(btn.dataset.track) === currentVersion) {
       btn.classList.add("active");
     } else {
@@ -274,7 +274,7 @@ window.addEventListener("keydown", (e) => {
 });
 
 // Make the floating UI clickable
-ostButtons.forEach((btn) => {
+bgmButtons.forEach((btn) => {
   btn.addEventListener("click", (e) => {
     e.stopPropagation(); // Prevents accidental double-clicks on the window
     const clickedVersion = parseInt(btn.dataset.track);
