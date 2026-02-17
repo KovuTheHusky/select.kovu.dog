@@ -1,8 +1,11 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <title>Select</title>
     <link rel="stylesheet" href="assets/styles/style.css" />
     <link rel="icon" href="https://kovu.dog/favicon.webp" />
@@ -153,6 +156,25 @@
         <h2 id="intro-boss-name" class="intro-name"></h2>
       </div>
     </div>
+
+    <button id="menu-btn" class="game-btn" onclick="toggleMenu()">
+      &#9776;
+    </button>
+
+    <button id="version-btn" class="game-btn">26.0</button>
+
+    <div id="side-menu">
+      <button
+        id="menu-close-btn"
+        class="game-btn menu-item"
+        onclick="toggleMenu()"
+      >
+        Close Menu
+      </button>
+    </div>
+
+    <div id="menu-overlay" onclick="toggleMenu()"></div>
+
     <script src="assets/scripts/script.js"></script>
   </body>
 </html>

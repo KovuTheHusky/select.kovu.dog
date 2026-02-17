@@ -281,3 +281,16 @@ ostButtons.forEach((btn) => {
     changeTrack(clickedVersion);
   });
 });
+
+function toggleMenu() {
+  const menu = document.getElementById("side-menu");
+  const overlay = document.getElementById("menu-overlay");
+  const isOpen = menu.classList.contains("open");
+  if (isOpen) {
+    menu.classList.remove("open");
+    overlay.classList.remove("visible");
+  } else {
+    menu.classList.add("open");
+    overlay.classList.add("visible");
+  }
+}
