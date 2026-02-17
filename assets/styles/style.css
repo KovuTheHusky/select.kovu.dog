@@ -535,7 +535,14 @@ main {
 }
 
 @media (hover: hover) {
-  .boss-cell:hover {
+
+  /* Only flash if it's a boss cell AND it's NOT the center character */
+  .boss-cell:not(.center-character):hover {
     animation: flashCursor 0.25s step-end infinite;
   }
+}
+
+/* Also ensure the center character is protected on mobile taps just in case */
+.center-character.mobile-hover-active {
+  animation: none;
 }
