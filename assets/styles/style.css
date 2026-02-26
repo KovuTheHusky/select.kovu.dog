@@ -467,8 +467,7 @@ main {
   background: transparent !important;
   box-shadow: none !important;
   cursor: default !important;
-  margin-bottom: 10px !important;
-  /* Pulls it closer to the buttons below */
+  margin-bottom: 0 !important;
   pointer-events: none;
   opacity: 1 !important;
 }
