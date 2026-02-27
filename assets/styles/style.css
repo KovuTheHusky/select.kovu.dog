@@ -501,19 +501,6 @@ main {
   background-color: #0d47a1;
   /* Keep it pressed in */
   border: 2px solid #fff;
-  animation: bgmTextPulse 0.5s step-end infinite;
-}
-
-@keyframes bgmTextPulse {
-
-  0%,
-  100% {
-    color: #F8B800;
-  }
-
-  50% {
-    color: #fff;
-  }
 }
 
 @media (max-width: 600px) {
