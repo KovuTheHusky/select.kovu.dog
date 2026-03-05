@@ -3,12 +3,17 @@
   "configVersion": 1,
   "workspaces": {
     "": {
+      "dependencies": {
+        "@fortawesome/fontawesome-free": "^7.2.0",
+      },
       "devDependencies": {
         "prettier": "^3.8.1",
       },
     },
   },
   "packages": {
+    "@fortawesome/fontawesome-free": ["@fortawesome/fontawesome-free@7.2.0", "", {}, "sha512-3DguDv/oUE+7vjMeTSOjCSG+KeawgVQOHrKRnvUuqYh1mfArrh7s+s8hXW3e4RerBA1+Wh+hBqf8sJNpqNrBWg=="],
+
     "prettier": ["prettier@3.8.1", "", { "bin": { "prettier": "bin/prettier.cjs" } }, "sha512-UOnG6LftzbdaHZcKoPFtOcCKztrQ57WkHDeRD9t/PTQtmT0NHSeWWepj6pS0z/N7+08BHFDQVUrfmfMRcZwbMg=="],
   }
 }

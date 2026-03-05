@@ -1,5 +1,7 @@
 {
-  "dependencies": {},
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^7.2.0"
+  },
   "devDependencies": {
     "prettier": "^3.8.1"
   }
